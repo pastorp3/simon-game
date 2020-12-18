@@ -51,6 +51,21 @@ const checkAnswer = (currentLevel) => {
     return status;
 }
 
+const gameOver = () => {
+  let lose = new Audio('sounds/wrong.mp3');
+  lose.play();
+  $('body').addClass('game-over');
+  setTimeout(function(){
+      $('body').removeClass('game-over');
+  }, 100);
+
+  $('h1').text('Game Over, Press Any Key to Restart');
+  start = false;
+  level = 0;
+  userPattern = [];
+  gamePattern = [];
+}
+
 const nextSequence = () => {
   console.log(level);
   $('h1').text(`Leve ${level}`);
@@ -68,10 +83,15 @@ $('.btn').click(function(e) {
   sound(userChoosencolor);
   animPress(userChoosencolor);
   if ( gamePattern.length === userPattern.length) {
-    checkAnswer(level);
-    setTimeout(function(){
-      nextSequence();
-    }, 500);
+    let ongame = checkAnswer(level);
+    if (ongame === true){
+      gameOver();
+    } else {
+      setTimeout(function(){
+        nextSequence();
+      }, 500);
+    }
+
 
   }
 });
